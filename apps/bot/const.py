@@ -136,3 +136,7 @@ EXIST_USER_STARTED = {
     "uz": "Siz allaqachon start qilgansiz foydalanishda davom eting",
     "ru": "Продолжайте использовать то, что вы уже начали"
 }
+PRODUCT_DOES_NOT_EXIST = {
+    "uz": "Mahsulot mavjud emas",
+    "ru": "Товар недоступен"
+}

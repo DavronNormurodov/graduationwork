@@ -35,14 +35,22 @@ def show_settings(bot, chat_id, lang):
 
 
 def show_categories(bot, chat_id, lang):
-    bot.send_message(chat_id, "maxsulotlar", reply_markup=utils.get_categories_keyboard(lang))
+    bot.send_message(chat_id, const.PRODUCTS[lang].split()[1], reply_markup=utils.get_categories_keyboard(lang))
     bot.set_state(chat_id, UserStates.categories.name)
+
+
+def show_sub_categories(bot, chat_id, lang, cat):
+    bot.send_message(chat_id, const.PRODUCTS[lang].split()[1], reply_markup=utils.get_subcategories_keyboard(lang, cat))
+    # bot.set_state(chat_id, UserStates.subcategories.name)
 
 
 def show_products(bot, chat_id, lang, cat):
     product = Product.objects.filter(category=cat).order_by('id').first()
-    caption = f'{product.title[lang]}\n\n{product.price}'
-    bot.send_photo(chat_id, product.image, caption, reply_markup=utils.get_inline_products(product))
+    if product:
+        caption = f'{product.title[lang]}\n\n{product.price}'
+        bot.send_photo(chat_id, product.image, caption, reply_markup=utils.get_inline_products(product))
+    else:
+        bot.send_message(chat_id, const.PRODUCT_DOES_NOT_EXIST[lang])
 
 
 def show_next_product(bot, user, product_id, message_id, step):

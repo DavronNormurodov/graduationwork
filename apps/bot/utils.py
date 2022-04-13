@@ -30,13 +30,34 @@ def get_settings_menu_keyboard(lang):
 
 def get_categories_keyboard(lang):
     rkm = ReplyKeyboardMarkup(True, row_width=2)
-    categories = Category.objects.all()
+    categories = Category.objects.filter(parent=None)
     c = [category for category in categories]
     count = len(c)
     i = 0
     while i < count:
         if not count % 2:
             rkm.add(c[i].title[lang], c[i+1].title[lang])
+            i += 2
+        else:
+            if i == count - 1:
+                rkm.add(c[i].title[lang])
+                i += 2
+            else:
+                rkm.add(c[i].title[lang], c[i + 1].title[lang])
+                i += 2
+    rkm.add(const.BACK[lang])
+    return rkm
+
+
+def get_subcategories_keyboard(lang, cat):
+    rkm = ReplyKeyboardMarkup(True, row_width=2)
+    categories = cat.children.all()
+    c = [category for category in categories]
+    count = len(c)
+    i = 0
+    while i < count:
+        if not count % 2:
+            rkm.add(c[i].title[lang], c[i + 1].title[lang])
             i += 2
         else:
             if i == count - 1:
@@ -65,3 +86,20 @@ def get_inline_products(product):
 def get_from_message(message):
     return message.from_user.id, message.chat.id, message.text
 
+
+def set_category(cat):
+    with open('apps/bot/category.txt', 'w') as f:
+        f.write(f'{cat.id}')
+
+
+def get_category():
+    with open('apps/bot/category.txt') as f:
+        cat_id = f.read()
+    if cat_id:
+        cat = Category.objects.get(id=cat_id)
+        if cat.parent:
+            if cat.parent.parent:
+                return cat.parent.parent
+            else:
+                return 1
+    return None

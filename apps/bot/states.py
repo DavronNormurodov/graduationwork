@@ -1,6 +1,14 @@
 from telebot.handler_backends import State, StatesGroup
 
 
+# class State:
+#     def __init__(self, name=None) -> None:
+#         self.name = name
+#
+#     def __str__(self) -> str:
+#         return self.name
+
+
 class UserStates(StatesGroup):
     token = State()
     new_start = State()
@@ -14,4 +22,6 @@ class UserStates(StatesGroup):
     contact_change = State()
     categories = State()
     products = State()
+    subcategories = State()
+
 

@@ -46,20 +46,35 @@ def handle_main_menu(bot, chat_id, msg, lang):
 
 
 def handle_categories(bot, chat_id, msg, lang):
-    cat = None
-    p = False
-    for c in Category.objects.all():
-        if c.title[lang] == msg:
-            p = True
-            cat = c
-            break
-    if cat:
-        askers.show_products(bot, chat_id, lang, cat)
-
-    elif msg == const.BACK[lang]:
-        bot.send_message(chat_id, const.BACK_MAIN_MENU[lang], reply_markup=utils.get_main_menu_keyboard(lang))
-        bot.set_state(chat_id, UserStates.main_menu.name)
-    # elif msg in [c for c in Category.objects.all()]
+    if msg == const.BACK[lang]:
+        cat = utils.get_category()
+        if not cat:
+            bot.send_message(chat_id, const.BACK_MAIN_MENU[lang], reply_markup=utils.get_main_menu_keyboard(lang))
+            bot.set_state(chat_id, UserStates.main_menu.name)
+        elif cat == 1:
+            askers.show_categories(bot, chat_id, lang)
+            utils.set_category(Category.objects.filter(parent=None).first())
+        else:
+            askers.show_sub_categories(bot, chat_id, lang, cat)
+            if cat.children.all():
+                utils.set_category(cat.children.first())
+            else:
+                utils.set_category(cat)
+    else:
+        cat = None
+        for c in Category.objects.all():
+            if c.title[lang] == msg:
+                cat = c
+                break
+        if cat:
+            if cat.children.all():
+                utils.set_category(cat.children.first())
+            else:
+                utils.set_category(cat)
+            if not cat.children.all():
+                askers.show_products(bot, chat_id, lang, cat)
+            else:
+                askers.show_sub_categories(bot, chat_id, lang, cat)
 
 
 def handle_settings_menu(bot, chat_id, msg, lang):
