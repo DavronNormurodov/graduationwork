@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.JSONField()),
-                ('parent', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='children', to='products.category.txt')),
+                ('parent', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='children', to='products.category')),
             ],
         ),
         migrations.CreateModel(
@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('image', models.ImageField(null=True, upload_to=products.models.upload_to)),
                 ('desc', models.JSONField(null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('category.txt', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='products', to='products.category.txt')),
+                ('category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='products', to='products.category')),
             ],
         ),
     ]
