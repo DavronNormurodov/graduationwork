@@ -83,6 +83,19 @@ def get_inline_products(product):
     return ikm
 
 
+def get_inline_keyboard_numbers(product_id):
+    ikbs = [
+        InlineKeyboardButton('◀️', callback_data=f'back_{product_id}'),
+        InlineKeyboardButton(f"{product_id}/{5}", callback_data='2'),
+        InlineKeyboardButton("▶️", callback_data=f'forward_{product_id}')
+    ]
+    for i in range(1, 10):
+        ikbs.append(InlineKeyboardButton(f'{i}', callback_data=f'toCard:{i}_{product_id}'))
+    ikm = InlineKeyboardMarkup()
+    ikm.add(*ikbs)
+    return ikm
+
+
 def get_from_message(message):
     return message.from_user.id, message.chat.id, message.text
 

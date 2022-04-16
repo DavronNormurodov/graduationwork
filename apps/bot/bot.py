@@ -2,7 +2,7 @@ import telebot
 from telebot.storage import StateMemoryStorage
 # from telebot.handler_backends import State, StatesGroup
 from telebot import custom_filters
-from telebot.types import (ReplyKeyboardMarkup, KeyboardButton,
+from telebot.types import (ReplyKeyboardMarkup, KeyboardButton, InputMedia,
                            ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton)
 import re
 
@@ -118,10 +118,12 @@ def callback_handler(call):
     product_id = data.split('_')[1]
     message_id = call.message.message_id
     if step == 'add':
-        # db_utils.add_to_card(user, chat_id, product_id)
+        askers.show_keyboard_numbers(bot, chat_id, message_id, product_id, user.lang)
         pass
     elif step in ('forward', 'back'):
         askers.show_next_product(bot, user, product_id, message_id, step)
+    elif step.split(':')[0] == 'toCard':
+        db_utils.add_to_card(user, product_id, step.split(':')[1])
 
 
 bot.add_custom_filter(custom_filters.StateFilter(bot))

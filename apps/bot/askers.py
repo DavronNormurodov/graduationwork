@@ -2,8 +2,8 @@ from bot import const, utils, db_utils
 from bot.states import UserStates
 from users.models import User
 from products.models import Product
-
-from telebot.types import ReplyKeyboardRemove, ReplyKeyboardMarkup
+from orders.models import Order
+from telebot.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, InputMedia
 
 
 def ask_language(bot, chat_id):
@@ -34,6 +34,20 @@ def show_settings(bot, chat_id, lang):
     bot.set_state(chat_id, UserStates.settings.name)
 
 
+def show_card(bot, chat_id, lang):
+    user = db_utils.get_user(chat_id)
+    order = Order.objects.filter(user=user, status='active').first()
+    msg = ''
+    if not order:
+        bot.send_message(chat_id, const.EMPTY_CARD_INFO[lang])
+    else:
+        for op in order.products.all():
+            msg += f'{op.product.title[user.lang]}:\n\t\t{op.product.price} \
+        * {op.amount} = {op.product.price * op.amount}\n'
+        msg += f'{const.TOTAL_PRICE[user.lang]} = {order.total_price}'
+        bot.send_message(chat_id, msg)
+
+
 def show_categories(bot, chat_id, lang):
     bot.send_message(chat_id, const.PRODUCTS[lang].split()[1], reply_markup=utils.get_categories_keyboard(lang))
     bot.set_state(chat_id, UserStates.categories.name)
@@ -53,6 +67,11 @@ def show_products(bot, chat_id, lang, cat):
         bot.send_message(chat_id, const.PRODUCT_DOES_NOT_EXIST[lang])
 
 
+def show_keyboard_numbers(bot, chat_id, message_id, product_id, lang):
+    bot.edit_message_reply_markup(chat_id, message_id, reply_markup=utils.get_inline_keyboard_numbers(product_id))
+    # bot.send_message(chat_id, 'add', reply_markup=utils.get_inline_keyboard_numbers())
+
+
 def show_next_product(bot, user, product_id, message_id, step):
     chat_id = user.chat_id
     product_cat = Product.objects.get(id=product_id).category
@@ -62,15 +81,23 @@ def show_next_product(bot, user, product_id, message_id, step):
         else products.filter(id__lt=product_id).last()
     if next_product:
         caption = f'{next_product.title[user.lang]}\n\n{next_product.price}'
-        bot.delete_message(chat_id, message_id)
-        bot.send_photo(chat_id, next_product.image, caption,
-                       reply_markup=utils.get_inline_products(next_product))
+        try:
+            bot.edit_message_media(InputMedia('photo', next_product.image, caption),
+                                   chat_id,
+                                   message_id,
+                                   reply_markup=utils.get_inline_products(next_product))
+        except Exception:
+            pass
     else:
         next_product = products.first() if step == 'forward' else products.last()
         caption = f'{next_product.title[user.lang]}\n\n{next_product.price}'
-        bot.delete_message(chat_id, message_id)
-        bot.send_photo(chat_id, next_product.image, caption,
-                       reply_markup=utils.get_inline_products(next_product))
+        try:
+            bot.edit_message_media(InputMedia('photo', next_product.image, caption),
+                                   chat_id,
+                                   message_id,
+                                   reply_markup=utils.get_inline_products(next_product))
+        except Exception:
+            pass
 
 
 def ask_lang_change(bot, chat_id, lang):

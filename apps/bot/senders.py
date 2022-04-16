@@ -43,6 +43,8 @@ def handle_main_menu(bot, chat_id, msg, lang):
         askers.show_settings(bot, chat_id, lang)
     if msg == const.PRODUCTS[lang]:
         askers.show_categories(bot, chat_id, lang)
+    if msg == const.CARD[lang]:
+        askers.show_card(bot, chat_id, lang)
 
 
 def handle_categories(bot, chat_id, msg, lang):

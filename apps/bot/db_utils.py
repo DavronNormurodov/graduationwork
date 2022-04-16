@@ -1,4 +1,5 @@
 from users.models import User
+from orders.models import Order, OrderProduct
 from bot import const
 
 
@@ -28,3 +29,19 @@ def set_name(user, name):
 def set_contact(user, phone_number):
     user.contact_number = phone_number
     user.save()
+
+
+def add_to_card(user, product_id, amount):
+    order = Order.objects.filter(user=user, status='active').first()
+    if order:
+        order_product = OrderProduct.objects.filter(order_id=order.id, product_id=product_id).first()
+        if not order_product:
+            order_product = OrderProduct.objects.create(order_id=order.id, product_id=product_id, amount=int(amount))
+        else:
+            order_product.amount += int(amount)
+            order_product.save()
+    else:
+        order = Order.objects.create(user=user)
+        order_product = OrderProduct.objects.create(order_id=order.id, product_id=product_id, amount=int(amount))
+    order.total_price += order_product.product.price
+    order.save()
