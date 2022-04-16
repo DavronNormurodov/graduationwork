@@ -109,6 +109,17 @@ def main_menu_handler(message):
     senders.handle_contact_change(bot, chat_id, msg, user)
 
 
+@bot.message_handler(func=lambda msg: True)
+def main_menu_handler(message):
+    user_id, chat_id, msg = utils.get_from_message(message)
+    user = db_utils.get_user(chat_id)
+    if not user:
+        askers.user_not_found(bot, chat_id)
+    bot.send_message(chat_id, const.PRODUCTS[user.lang],
+                     reply_markup=utils.get_main_menu_keyboard(user.lang))
+    bot.set_state(chat_id, UserStates.main_menu.name)
+
+
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
     chat_id = call.from_user.id
