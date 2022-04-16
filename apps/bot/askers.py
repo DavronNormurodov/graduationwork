@@ -45,7 +45,8 @@ def show_card(bot, chat_id, lang):
             msg += f'{op.product.title[user.lang]}:\n\t\t{op.product.price} \
         * {op.amount} = {op.product.price * op.amount}\n'
         msg += f'{const.TOTAL_PRICE[user.lang]} = {order.total_price}'
-        bot.send_message(chat_id, msg)
+        bot.send_message(chat_id, msg, reply_markup=utils.get_card_info_keyboard(order, lang))
+        bot.set_state(chat_id, UserStates.orders.name)
 
 
 def show_categories(bot, chat_id, lang):

@@ -73,6 +73,15 @@ def categories_handler(message):
     senders.handle_categories(bot, chat_id, msg, user.lang)
 
 
+@bot.message_handler(state=UserStates.orders.name)
+def orders_handler(message):
+    user_id, chat_id, msg = utils.get_from_message(message)
+    user = db_utils.get_user(chat_id)
+    if not user:
+        askers.user_not_found(bot, chat_id)
+    senders.handle_orders(bot, chat_id, msg, user)
+
+
 @bot.message_handler(state=UserStates.settings.name)
 def settings_handler(message):
     user_id, chat_id, msg = utils.get_from_message(message)

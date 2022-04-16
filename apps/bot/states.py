@@ -23,5 +23,6 @@ class UserStates(StatesGroup):
     categories = State()
     products = State()
     subcategories = State()
+    orders = State()
 
 

@@ -5,6 +5,7 @@ from telebot.types import (ReplyKeyboardMarkup, KeyboardButton,
 from bot import db_utils, const
 from users.models import User
 from products.models import Product, Category
+from .states import UserStates
 
 
 def get_language_keyboard():
@@ -96,8 +97,20 @@ def get_inline_keyboard_numbers(product_id):
     return ikm
 
 
+def get_card_info_keyboard(order, lang):
+    rkm = ReplyKeyboardMarkup(True, row_width=2)
+    rkm.add(const.CLEAR_CARD[lang])
+    rkm.add(const.BACK[lang])
+    return rkm
+
+
 def get_from_message(message):
     return message.from_user.id, message.chat.id, message.text
+
+
+def back_to_main_menu(bot, chat_id, lang):
+    bot.send_message(chat_id, const.BACK_MAIN_MENU[lang], reply_markup=get_main_menu_keyboard(lang))
+    bot.set_state(chat_id, UserStates.main_menu.name)
 
 
 def set_category(cat):

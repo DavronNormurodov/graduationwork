@@ -45,3 +45,7 @@ def add_to_card(user, product_id, amount):
         order_product = OrderProduct.objects.create(order_id=order.id, product_id=product_id, amount=int(amount))
     order.total_price += order_product.product.price * int(amount)
     order.save()
+
+
+def clear_the_card(order):
+    order.delete()

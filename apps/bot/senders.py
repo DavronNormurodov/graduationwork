@@ -1,6 +1,7 @@
 from bot.states import UserStates
 from bot import const, db_utils, utils, askers
 from products.models import Category, Product
+from orders.models import Order
 import re
 
 
@@ -77,6 +78,16 @@ def handle_categories(bot, chat_id, msg, lang):
                 askers.show_products(bot, chat_id, lang, cat)
             else:
                 askers.show_sub_categories(bot, chat_id, lang, cat)
+
+
+def handle_orders(bot, chat_id, msg, user):
+    lang = user.lang
+    if msg == const.BACK[lang]:
+        utils.back_to_main_menu(bot, chat_id, lang)
+    elif msg == const.CLEAR_CARD[lang]:
+        order = Order.objects.get(user=user, status='active')
+        db_utils.clear_the_card(order)
+        utils.back_to_main_menu(bot, chat_id, lang)
 
 
 def handle_settings_menu(bot, chat_id, msg, lang):

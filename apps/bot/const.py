@@ -115,6 +115,12 @@ TOTAL_PRICE = {
     "ru": "Общая сумма"
 }
 
+# CARD INFO BUTTONS
+CLEAR_CARD = {
+    "uz": "Tozalash",
+    "ru": "Чистить"
+}
+
 
 # ERROR MESSAGES
 USER_NOT_FOUND = {
