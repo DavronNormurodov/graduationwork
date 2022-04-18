@@ -109,6 +109,10 @@ EMPTY_CARD_INFO = {
     "uz": "Savatingiz hozircha bo'sh",
     "ru": "Ваша корзина сейчас пуста"
 }
+EXIST_CARD_INFO = {
+    "uz": "Sizning savatingiz",
+    "ru": "Ваша корзина"
+}
 
 TOTAL_PRICE = {
     "uz": "Umumiy summa",

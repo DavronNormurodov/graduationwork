@@ -52,8 +52,7 @@ def handle_categories(bot, chat_id, msg, lang):
     if msg == const.BACK[lang]:
         cat = utils.get_category()
         if not cat:
-            bot.send_message(chat_id, const.BACK_MAIN_MENU[lang], reply_markup=utils.get_main_menu_keyboard(lang))
-            bot.set_state(chat_id, UserStates.main_menu.name)
+            utils.back_to_main_menu(bot, chat_id, lang)
         elif cat == 1:
             askers.show_categories(bot, chat_id, lang)
             utils.set_category(Category.objects.filter(parent=None).first())

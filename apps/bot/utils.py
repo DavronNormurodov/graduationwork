@@ -104,6 +104,13 @@ def get_card_info_keyboard(order, lang):
     return rkm
 
 
+def get_card_info_inline_keyboard(order, lang):
+    ikm = InlineKeyboardMarkup()
+    order_products = order.products.all()
+    ikm.add(*[InlineKeyboardButton(f'{op.product.title[lang]}\n❌', callback_data=f'remove_{op.product.id}') for op in order_products])
+    return ikm
+
+
 def get_from_message(message):
     return message.from_user.id, message.chat.id, message.text
 
