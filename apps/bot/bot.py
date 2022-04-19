@@ -7,6 +7,7 @@ from telebot.types import (ReplyKeyboardMarkup, KeyboardButton, InputMedia,
 import re
 
 from users.models import User
+from orders.models import Order, OrderProduct
 from bot import const, db_utils, utils, senders, askers
 from bot.states import UserStates
 
@@ -82,6 +83,16 @@ def orders_handler(message):
     senders.handle_orders(bot, chat_id, msg, user)
 
 
+@bot.message_handler(content_types=['location'])
+def location_handler(message):
+    user_id, chat_id, msg = utils.get_from_message(message)
+    location = [message.location.latitude, message.location.longitude]
+    print(location)
+    user = db_utils.get_user(chat_id)
+    if not user:
+        askers.user_not_found(bot, chat_id)
+
+
 @bot.message_handler(state=UserStates.settings.name)
 def settings_handler(message):
     user_id, chat_id, msg = utils.get_from_message(message)
@@ -119,7 +130,7 @@ def main_menu_handler(message):
 
 
 @bot.message_handler(func=lambda msg: True)
-def main_menu_handler(message):
+def default_message_handler(message):
     user_id, chat_id, msg = utils.get_from_message(message)
     user = db_utils.get_user(chat_id)
     if not user:
@@ -144,6 +155,9 @@ def callback_handler(call):
         askers.show_next_product(bot, user, product_id, message_id, step)
     elif step.split(':')[0] == 'toCard':
         db_utils.add_to_card(user, product_id, step.split(':')[1])
+    elif step == 'remove':
+        order = Order.objects.get(user=user, status='active')
+        db_utils.remove_product_from_card(bot, chat_id, message_id, order, product_id, user.lang)
 
 
 bot.add_custom_filter(custom_filters.StateFilter(bot))

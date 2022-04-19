@@ -87,6 +87,10 @@ def handle_orders(bot, chat_id, msg, user):
         order = Order.objects.get(user=user, status='active')
         db_utils.clear_the_card(order)
         utils.back_to_main_menu(bot, chat_id, lang)
+    elif msg == const.ORDER[lang]:
+        pass
+    elif msg == const.ORDER_DESCRIPTION[lang]:
+        bot.send_message(chat_id, '')
 
 
 def handle_settings_menu(bot, chat_id, msg, lang):

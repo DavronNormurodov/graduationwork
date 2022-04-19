@@ -1,6 +1,7 @@
 from users.models import User
 from orders.models import Order, OrderProduct
 from bot import const
+from bot import utils
 
 
 def get_user(chat_id):
@@ -45,6 +46,26 @@ def add_to_card(user, product_id, amount):
         order_product = OrderProduct.objects.create(order_id=order.id, product_id=product_id, amount=int(amount))
     order.total_price += order_product.product.price * int(amount)
     order.save()
+
+
+def remove_product_from_card(bot, chat_id, message_id, order, product_id, lang):
+    order_product = OrderProduct.objects.get(product_id=product_id)
+    order_product.delete()
+    order.total_price -= order_product.product.price * order_product.amount
+    order.save()
+    msg = ''
+    if order.products.exists():
+        for op in order.products.all():
+            msg += f'{op.product.title[lang]}:\n\t\t{op.product.price} \
+                * {op.amount} = {op.product.price * op.amount}\n'
+        msg += f'{const.TOTAL_PRICE[lang]} = {order.total_price}'
+        bot.edit_message_text(msg, chat_id, message_id)
+        bot.edit_message_reply_markup(chat_id, message_id,
+                                      reply_markup=utils.get_card_info_inline_keyboard(order, lang))
+    else:
+        order.delete()
+        bot.delete_message(chat_id, message_id)
+        utils.back_to_main_menu(bot, chat_id, lang)
 
 
 def clear_the_card(order):

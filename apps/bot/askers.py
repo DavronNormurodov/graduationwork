@@ -4,6 +4,7 @@ from users.models import User
 from products.models import Product
 from orders.models import Order
 from telebot.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, InputMedia
+from geopy.geocoders import Nominatim
 
 
 def ask_language(bot, chat_id):
@@ -48,6 +49,16 @@ def show_card(bot, chat_id, lang):
         bot.send_message(chat_id, const.EXIST_CARD_INFO[lang], reply_markup=utils.get_card_info_keyboard(order, lang))
         bot.send_message(chat_id, msg, reply_markup=utils.get_card_info_inline_keyboard(order, lang))
         bot.set_state(chat_id, UserStates.orders.name)
+
+
+def show_order_details(bot, chat_id, order, location, lang):
+    geolocator = Nominatim(user_agent="geoapiExercises")
+    Latitude, Longitude = map(str, location)
+    location = geolocator.reverse(Latitude + "," + Longitude)
+    address = location.raw['address']
+    city = address.get('city', '')
+    state = address.get('state', '')
+    country = address.get('country', '')
 
 
 def show_categories(bot, chat_id, lang):

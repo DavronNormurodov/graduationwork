@@ -99,7 +99,9 @@ def get_inline_keyboard_numbers(product_id):
 
 def get_card_info_keyboard(order, lang):
     rkm = ReplyKeyboardMarkup(True, row_width=2)
-    rkm.add(const.CLEAR_CARD[lang])
+    kb = KeyboardButton(const.LOCATION[lang], request_location=True)
+    rkm.add(const.CLEAR_CARD[lang], const.ORDER[lang])
+    rkm.add(kb, const.ORDER_DESCRIPTION[lang])
     rkm.add(const.BACK[lang])
     return rkm
 

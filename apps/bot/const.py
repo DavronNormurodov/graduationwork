@@ -121,11 +121,25 @@ TOTAL_PRICE = {
 
 # CARD INFO BUTTONS
 CLEAR_CARD = {
-    "uz": "Tozalash",
-    "ru": "Чистить"
+    "uz": "Bekor qilish",
+    "ru": "Отмена"
 }
-
-
+ORDER = {
+    "uz": "Buyurtma berish",
+    "ru": "Заказ"
+}
+LOCATION = {
+    "uz": "Joylashuv",
+    "ru": "Локация"
+}
+ORDER_DESCRIPTION = {
+    "uz": "Izoh",
+    "ru": "Комментарий"
+}
+ASK_DESCRIPTION = {
+    "uz": "Izoh ",
+    "ru": "Комментарий"
+}
 # ERROR MESSAGES
 USER_NOT_FOUND = {
     "uz": "Xatolik sodir bo'ldi. Iltimos, xatoliklarni oldini olish uchun /start tugmasini bosib, qaytadan boshlang.",
