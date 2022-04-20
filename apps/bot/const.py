@@ -2,7 +2,7 @@
 ASK_LANGUAGE = "🇺🇿 Tilni tanlang\n🇷🇺 Выберите язык"
 
 ASK_NAME = {
-    "uz": "Ism yarifingizni kiriting",
+    "uz": "Ism sharifingizni kiriting",
     "ru": "Введите свое имя"
 }
 
@@ -12,8 +12,8 @@ LANG_CHOOSE_MENU = {
 }
 
 ASK_CONTACT_NUMBER = {
-    "uz": "Telefon raqamingizni kiriting",
-    "ru": "Введите свой номер телефона"
+    "uz": "Telefon raqamingizni '998 [XX] [XXX XX XX]' ushbu formatda kiriting (12 ta raqam)",
+    "ru": "Введите свой номер телефона '998 [XX] [XXX XX XX]' в этом формате (12 цифр)"
 }
 
 SEND_CONTACT = {
@@ -121,34 +121,49 @@ TOTAL_PRICE = {
 
 # CARD INFO BUTTONS
 CLEAR_CARD = {
-    "uz": "Bekor qilish",
-    "ru": "Отмена"
+    "uz": "❌ Bekor qilish",
+    "ru": "❌ Отмена"
 }
 ORDER = {
-    "uz": "Buyurtma berish",
-    "ru": "Заказ"
+    "uz": "🚛 Buyurtma berish",
+    "ru": "🚛 Заказ"
 }
 LOCATION = {
-    "uz": "Joylashuv",
-    "ru": "Локация"
+    "uz": "📍 Joylashuv",
+    "ru": "📍 Локация"
 }
 ORDER_DESCRIPTION = {
-    "uz": "Izoh",
-    "ru": "Комментарий"
+    "uz": "🖋Izoh",
+    "ru": "🖋Комментарий"
 }
 ASK_DESCRIPTION = {
-    "uz": "Izoh ",
-    "ru": "Комментарий"
+    "uz": "Izoh yozing",
+    "ru": "Написать комментарий"
+}
+ASK_LOCATION = {
+    "uz": "Buyurtma berish uchun location jo'natishingiz kerak",
+    "ru": "Вам необходимо отправить адрес для размещения заказа"
+}
+ORDER_USER = {
+    "uz": "🤵‍♂️Buyurtmachi",
+    "ru": "🤵‍♂️Заказчик"
+}
+ORDER_PHONE = {
+    "uz": "📞Telefon",
+    "ru": "📞Телефон"
+}
+ORDER_ADDRESS = {
+    "uz": "📍Manzil",
+    "ru": "📍Адрес"
+}
+PAYMENT = {
+    "uz": "To'lov 💷",
+    "ru": "Оплата 💷"
 }
 # ERROR MESSAGES
 USER_NOT_FOUND = {
     "uz": "Xatolik sodir bo'ldi. Iltimos, xatoliklarni oldini olish uchun /start tugmasini bosib, qaytadan boshlang.",
     "ru": "Произошла ошибка. Пожалуйста, перезапустите, нажав кнопку / start, чтобы избежать ошибок."
-}
-
-INVALID_CONTACT_MESSAGE = {
-    "uz": "Telefon raqamingizni '998 [XX] [XXX XX XX]' ushbu formatda keriting (12 ta raqam)",
-    "ru": "Введите свой номер телефона '998 [XX] [XXX XX XX]' в этом формате (12 цифр)"
 }
 
 INVALID_NAME_MESSAGE = {

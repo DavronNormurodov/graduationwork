@@ -78,19 +78,21 @@ def categories_handler(message):
 def orders_handler(message):
     user_id, chat_id, msg = utils.get_from_message(message)
     user = db_utils.get_user(chat_id)
+    order = db_utils.get_order(user)
     if not user:
         askers.user_not_found(bot, chat_id)
-    senders.handle_orders(bot, chat_id, msg, user)
+    senders.handle_orders(bot, chat_id, msg, order, user.lang)
 
 
 @bot.message_handler(content_types=['location'])
 def location_handler(message):
     user_id, chat_id, msg = utils.get_from_message(message)
     location = [message.location.latitude, message.location.longitude]
-    print(location)
     user = db_utils.get_user(chat_id)
+    order = db_utils.get_order(user)
     if not user:
         askers.user_not_found(bot, chat_id)
+    db_utils.set_location(order, location)
 
 
 @bot.message_handler(state=UserStates.settings.name)

@@ -109,7 +109,13 @@ def get_card_info_keyboard(order, lang):
 def get_card_info_inline_keyboard(order, lang):
     ikm = InlineKeyboardMarkup()
     order_products = order.products.all()
-    ikm.add(*[InlineKeyboardButton(f'{op.product.title[lang]}\n❌', callback_data=f'remove_{op.product.id}') for op in order_products])
+    ikm.add(*[InlineKeyboardButton(f'{op.product.title[lang]}❌', callback_data=f'remove_{op.product.id}') for op in order_products])
+    return ikm
+
+
+def get_payment_inline_keyboard(order, lang):
+    ikm = InlineKeyboardMarkup()
+    ikm.add(InlineKeyboardButton(const.PAYMENT[lang], callback_data=f'pay_{order.id}'))
     return ikm
 
 

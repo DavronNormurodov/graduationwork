@@ -17,7 +17,7 @@ def get_lang(bot, chat_id, msg, user):
 
 
 def get_name(bot, chat_id, msg, lang):
-    if msg.isalpha():
+    if msg.replace(' ', '').isalpha():
         with bot.retrieve_data(chat_id) as data:
             data['name'] = msg
         askers.ask_contact(bot, chat_id, lang)
@@ -79,18 +79,23 @@ def handle_categories(bot, chat_id, msg, lang):
                 askers.show_sub_categories(bot, chat_id, lang, cat)
 
 
-def handle_orders(bot, chat_id, msg, user):
-    lang = user.lang
+def handle_orders(bot, chat_id, msg, order, lang):
     if msg == const.BACK[lang]:
         utils.back_to_main_menu(bot, chat_id, lang)
     elif msg == const.CLEAR_CARD[lang]:
-        order = Order.objects.get(user=user, status='active')
         db_utils.clear_the_card(order)
         utils.back_to_main_menu(bot, chat_id, lang)
     elif msg == const.ORDER[lang]:
-        pass
+        if not order.location:
+            bot.send_message(chat_id, const.ASK_LOCATION[lang])
+        else:
+            askers.show_order_details(bot, chat_id, order, order.location, lang)
     elif msg == const.ORDER_DESCRIPTION[lang]:
-        bot.send_message(chat_id, '')
+        bot.send_message(chat_id, const.ASK_DESCRIPTION[lang])
+    else:
+        order.description = msg
+        order.save()
+        bot.send_message(chat_id, '✅')
 
 
 def handle_settings_menu(bot, chat_id, msg, lang):
@@ -127,7 +132,7 @@ def handle_name_change(bot, chat_id, msg, user):
     if msg == const.BACK[lang]:
         bot.send_message(chat_id, const.BACK[lang].split()[0], reply_markup=utils.get_settings_menu_keyboard(lang))
         bot.set_state(chat_id, UserStates.settings.name)
-    elif msg.isalpha():
+    elif msg.replace(' ', '').isalpha():
         db_utils.set_name(user, msg)
         bot.send_message(chat_id, "✅", reply_markup=utils.get_settings_menu_keyboard(lang))
         bot.set_state(chat_id, UserStates.settings.name)
@@ -145,4 +150,4 @@ def handle_contact_change(bot, chat_id, msg, user):
         bot.send_message(chat_id, "✅", reply_markup=utils.get_settings_menu_keyboard(lang))
         bot.set_state(chat_id, UserStates.settings.name)
     else:
-        bot.send_message(chat_id, const.INVALID_CONTACT_MESSAGE[lang])
+        bot.send_message(chat_id, const.ASK_CONTACT_NUMBER[lang])

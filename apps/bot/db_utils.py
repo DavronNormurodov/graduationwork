@@ -3,12 +3,21 @@ from orders.models import Order, OrderProduct
 from bot import const
 from bot import utils
 
+from geopy.geocoders import Nominatim
+
 
 def get_user(chat_id):
     user = User.objects.filter(chat_id=chat_id).first()
     if not user:
         return None
     return user
+
+
+def get_order(user):
+    order = Order.objects.filter(user=user).first()
+    if not order:
+        return None
+    return order
 
 
 def set_lang(user, lang):
@@ -30,6 +39,18 @@ def set_name(user, name):
 def set_contact(user, phone_number):
     user.contact_number = phone_number
     user.save()
+
+
+def set_location(order, location):
+    geolocator = Nominatim(user_agent="geoapiExercises")
+    Latitude, Longitude = map(str, location)
+    order.location = {"latitude": Latitude, "longitude": Longitude}
+    order.save()
+    location = geolocator.reverse(Latitude + "," + Longitude)
+    address = location.raw['address']
+    city = address.get('city', '')
+    state = address.get('state', '')
+    country = address.get('country', '')
 
 
 def add_to_card(user, product_id, amount):
