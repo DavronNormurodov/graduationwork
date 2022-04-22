@@ -1,6 +1,7 @@
 from django.db.models import Model,\
                             JSONField,\
-                            BooleanField
+                            BooleanField,\
+                            CharField
 
 lang_choice = (
     ('uz', 'Uzbek'),
@@ -22,3 +23,8 @@ class User(Model):
 
     def __str__(self):
         return self.name
+
+
+class Admins(Model):
+    chat_id = CharField(max_length=50)
+    name = CharField(max_length=50)

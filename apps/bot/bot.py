@@ -95,6 +95,55 @@ def location_handler(message):
     db_utils.set_location(order, location)
 
 
+@bot.message_handler(state=UserStates.settings.name)
+def settings_handler(message):
+    user_id, chat_id, msg = utils.get_from_message(message)
+    user = db_utils.get_user(chat_id)
+    if not user:
+        askers.user_not_found(bot, chat_id)
+    senders.handle_settings_menu(bot, chat_id, msg, user.lang)
+
+
+@bot.message_handler(state=UserStates.lang_change.name)
+def lang_change_handler(message):
+    user_id, chat_id, msg = utils.get_from_message(message)
+    user = db_utils.get_user(chat_id)
+    if not user:
+        askers.user_not_found(bot, chat_id)
+    senders.handle_lang_change(bot, chat_id, msg, user)
+
+
+@bot.message_handler(state=UserStates.name_change.name)
+def name_change_handler(message):
+    user_id, chat_id, msg = utils.get_from_message(message)
+    user = db_utils.get_user(chat_id)
+    if not user:
+        askers.user_not_found(bot, chat_id)
+    senders.handle_name_change(bot, chat_id, msg, user)
+
+
+@bot.message_handler(state=UserStates.contact_change.name)
+def main_menu_handler(message):
+    user_id, chat_id, msg = utils.get_from_message(message)
+    user = db_utils.get_user(chat_id)
+    if not user:
+        askers.user_not_found(bot, chat_id)
+    senders.handle_contact_change(bot, chat_id, msg, user)
+
+
+@bot.message_handler(func=lambda msg: True)
+def default_message_handler(message):
+    user_id, chat_id, msg = utils.get_from_message(message)
+    user = db_utils.get_user(chat_id)
+    if not user:
+        askers.user_not_found(bot, chat_id)
+    bot.send_message(chat_id, const.PRODUCTS[user.lang],
+                     reply_markup=utils.get_main_menu_keyboard(user.lang))
+    bot.set_state(chat_id, UserStates.main_menu.name)
+
+
+"""==================================PAYMENT========================================="""
+
 from telebot.types import LabeledPrice, ShippingOption
 shipping_options = [
         ShippingOption(id='fast', title='Eng tez').add_price(LabeledPrice('Eng tez', 1000000)),
@@ -143,53 +192,6 @@ def got_payment(message):
                      const.SUCCESS[user.lang].format(
                          message.successful_payment.total_amount / 100, message.successful_payment.currency),
                      parse_mode='Markdown')
-
-
-@bot.message_handler(state=UserStates.settings.name)
-def settings_handler(message):
-    user_id, chat_id, msg = utils.get_from_message(message)
-    user = db_utils.get_user(chat_id)
-    if not user:
-        askers.user_not_found(bot, chat_id)
-    senders.handle_settings_menu(bot, chat_id, msg, user.lang)
-
-
-@bot.message_handler(state=UserStates.lang_change.name)
-def lang_change_handler(message):
-    user_id, chat_id, msg = utils.get_from_message(message)
-    user = db_utils.get_user(chat_id)
-    if not user:
-        askers.user_not_found(bot, chat_id)
-    senders.handle_lang_change(bot, chat_id, msg, user)
-
-
-@bot.message_handler(state=UserStates.name_change.name)
-def name_change_handler(message):
-    user_id, chat_id, msg = utils.get_from_message(message)
-    user = db_utils.get_user(chat_id)
-    if not user:
-        askers.user_not_found(bot, chat_id)
-    senders.handle_name_change(bot, chat_id, msg, user)
-
-
-@bot.message_handler(state=UserStates.contact_change.name)
-def main_menu_handler(message):
-    user_id, chat_id, msg = utils.get_from_message(message)
-    user = db_utils.get_user(chat_id)
-    if not user:
-        askers.user_not_found(bot, chat_id)
-    senders.handle_contact_change(bot, chat_id, msg, user)
-
-
-@bot.message_handler(func=lambda msg: True)
-def default_message_handler(message):
-    user_id, chat_id, msg = utils.get_from_message(message)
-    user = db_utils.get_user(chat_id)
-    if not user:
-        askers.user_not_found(bot, chat_id)
-    bot.send_message(chat_id, const.PRODUCTS[user.lang],
-                     reply_markup=utils.get_main_menu_keyboard(user.lang))
-    bot.set_state(chat_id, UserStates.main_menu.name)
 
 
 @bot.callback_query_handler(func=lambda call: True)
