@@ -144,6 +144,10 @@ ASK_LOCATION = {
     "uz": "Buyurtma berish uchun location jo'natishingiz kerak",
     "ru": "Вам необходимо отправить адрес для размещения заказа"
 }
+PAYMENT_NOTIFICATION = {
+    "uz": "To'lovni amalga oshirish uchun pastdagi tugmani bosing\n",
+    "ru": "Нажмите на кнопку ниже, чтобы произвести оплату\n"
+}
 ORDER_USER = {
     "uz": "🤵‍♂️Buyurtmachi",
     "ru": "🤵‍♂️Заказчик"
@@ -178,4 +182,16 @@ EXIST_USER_STARTED = {
 PRODUCT_DOES_NOT_EXIST = {
     "uz": "Mahsulot mavjud emas",
     "ru": "Товар недоступен"
+}
+INVALID_SHIPPING_ADDRESS = {
+    "uz": "Xorijga yetkazib berish xizmati mavjud emas",
+    "ru": "Доставка за границу недоступна"
+}
+TRY_AGAIN = {
+    "uz": "Xatolik ro'y berdi qaytadan urinib ko'ring",
+    "ru": "Произошла ошибка. Пожалуйста, попробуйте еще раз"
+}
+SUCCESS = {
+    "uz": "To'lov uchun rahmat! `{} {}` uchun buyurtmangizni imkon qadar tezroq yetkazamiz!\nAloqada qoling",
+    "ru": "Спасибо за оплату! Мы обработаем ваш заказ на `{} {}` как можно быстрее!\nОставайтесь на связи"
 }

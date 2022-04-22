@@ -14,7 +14,7 @@ def get_user(chat_id):
 
 
 def get_order(user):
-    order = Order.objects.filter(user=user).first()
+    order = Order.objects.filter(user=user, status='active').first()
     if not order:
         return None
     return order

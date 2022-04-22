@@ -50,49 +50,25 @@ def show_card(bot, chat_id, lang):
         bot.send_message(chat_id, msg, reply_markup=utils.get_card_info_inline_keyboard(order, lang))
         bot.set_state(chat_id, UserStates.orders.name)
 
-# from telebot.types import LabeledPrice, ShippingOption
-def show_order_details(bot, chat_id, order, location, lang):
+
+def show_order_details(bot, chat_id, order, lang):
     user = db_utils.get_user(chat_id)
-    geolocator = Nominatim(user_agent="geoapiExercises")
-    Latitude, Longitude = location.values()
-    location = geolocator.reverse(Latitude + "," + Longitude)
-    address = location.raw['address']
-    city = address.get('city', '')
-    state = address.get('state', '')
-    country = address.get('country', '')
+    # geolocator = Nominatim(user_agent="geoapiExercises")
+    # Latitude, Longitude = location.values()
+    # location = geolocator.reverse(Latitude + "," + Longitude)
+    # address = location.raw['address']
+    # city = address.get('city', '')
+    # state = address.get('state', '')
+    # country = address.get('country', '')
     msg = ''
     for i, op in enumerate(order.products.all()):
         msg += f'{i+1}. {op.product.title[lang]}: {op.amount} x {op.product.price}\n'
-    msg += f'{const.TOTAL_PRICE[lang]} = {order.total_price}\n\n'
-    msg += f'{const.ORDER_USER[lang]}: {user.name}\n\
-{const.ORDER_PHONE[lang]}: +{user.contact_number}\n\
-{const.ORDER_ADDRESS[lang]}: {country}, {city}\n\
-{const.ORDER_DESCRIPTION[lang]}: {order.description}\n'
+    msg += f'\n{const.TOTAL_PRICE[lang]} = {order.total_price}\n\n'
+    msg += f'\n{const.ORDER_USER[lang]}: {user.name}\n'
+    msg += f'\n{const.ORDER_PHONE[lang]}: +{user.contact_number}\n'
+
     bot.send_message(chat_id, msg, reply_markup=utils.get_payment_inline_keyboard(order, lang))
-    # prices = [LabeledPrice(label='Working Time Machine', amount=5750), LabeledPrice('Gift wrapping', 500)]
-    # shipping_options = [
-    #     ShippingOption(id='instant', title='WorldWide Teleporter').add_price(LabeledPrice('Teleporter', 1000)),
-    #     ShippingOption(id='pickup', title='Local pickup').add_price(LabeledPrice('Pickup', 300))]
-    # bot.send_invoice(chat_id, title=f'{order.id}',
-    #                  description=order.description,
-    #                  provider_token='398062629:TEST:999999999_F91D8F69C042267444B74CC0B3C747757EB0E065',
-    #                  currency='usd',
-    #                  prices=prices,
-    #                  invoice_payload='HAPPY FRIDAYS COUPON')
 
-
-
-# def send_invoice(bot, chat_id, order, lang):
-#     prices = [LabeledPrice(label='Working Time Machine', amount=5750), LabeledPrice('Gift wrapping', 500)]
-#     shipping_options = [
-#         ShippingOption(id='instant', title='WorldWide Teleporter').add_price(LabeledPrice('Teleporter', 1000)),
-#         ShippingOption(id='pickup', title='Local pickup').add_price(LabeledPrice('Pickup', 300))]
-#     bot.send_invoice(chat_id, title=f'{order.id}',
-#                      description=order.description,
-#                      provider_token='398062629:TEST:999999999_F91D8F69C042267444B74CC0B3C747757EB0E065',
-#                      currency='usd',
-#                      prices=prices,
-#                      invoice_payload='HAPPY FRIDAYS COUPON')
 
 def show_categories(bot, chat_id, lang):
     bot.send_message(chat_id, const.PRODUCTS[lang].split()[1], reply_markup=utils.get_categories_keyboard(lang))

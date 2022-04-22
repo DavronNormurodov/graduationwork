@@ -86,16 +86,13 @@ def handle_orders(bot, chat_id, msg, order, lang):
         db_utils.clear_the_card(order)
         utils.back_to_main_menu(bot, chat_id, lang)
     elif msg == const.ORDER[lang]:
-        if not order.location:
-            bot.send_message(chat_id, const.ASK_LOCATION[lang])
-        else:
-            askers.show_order_details(bot, chat_id, order, order.location, lang)
-    elif msg == const.ORDER_DESCRIPTION[lang]:
-        bot.send_message(chat_id, const.ASK_DESCRIPTION[lang])
-    else:
-        order.description = msg
-        order.save()
-        bot.send_message(chat_id, '✅')
+        askers.show_order_details(bot, chat_id, order, lang)
+    # elif msg == const.ORDER_DESCRIPTION[lang]:
+    #     bot.send_message(chat_id, const.ASK_DESCRIPTION[lang])
+    # else:
+    #     order.description = msg
+    #     order.save()
+    #     bot.send_message(chat_id, '✅')
 
 
 def handle_settings_menu(bot, chat_id, msg, lang):

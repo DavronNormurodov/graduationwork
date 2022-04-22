@@ -14,6 +14,7 @@ from products.models import Product
 
 status_choice = (
     ('active', 'Active'),
+    ('process', 'Process'),
     ('cancelled', 'Cancelled'),
     ('delivered', 'Delivered')
 )
@@ -25,6 +26,8 @@ class Order(Model):
     location = JSONField(null=True)
     description = TextField(null=True)
     status = CharField(max_length=10, choices=status_choice, default='active')
+    shipping_type = CharField(max_length=100, null=True, blank=True, default='fast')
+    address = CharField(max_length=255, null=True, blank=True, default='tashkent')
     created_at = DateField(auto_now_add=True)
 
 
