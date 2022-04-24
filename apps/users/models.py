@@ -28,3 +28,6 @@ class User(Model):
 class Admins(Model):
     chat_id = CharField(max_length=50)
     name = CharField(max_length=50)
+
+    def __str__(self):
+        return self.name

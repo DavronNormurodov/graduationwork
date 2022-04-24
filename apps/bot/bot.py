@@ -6,12 +6,13 @@ from telebot.types import (ReplyKeyboardMarkup, KeyboardButton, InputMedia,
                            ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton)
 import re
 
-from users.models import User
+from users.models import User, Admins
 from orders.models import Order, OrderProduct
 from bot import const, db_utils, utils, senders, askers
 from bot.states import UserStates
 
 Token = '5209006621:AAHrVgeVWJWrBUv754umJF-YZ0QnII9RQ9Q'
+provider_token = '398062629:TEST:999999999_F91D8F69C042267444B74CC0B3C747757EB0E065'
 state_storage = StateMemoryStorage()
 bot = telebot.TeleBot(token=Token, state_storage=state_storage)
 
@@ -25,6 +26,7 @@ def command_help(message):
 
 @bot.message_handler(commands=['start'])
 def command_help(message):
+    print(message)
     chat_id = message.from_user.id
     askers.user_requisites(bot, chat_id)
 
@@ -188,10 +190,23 @@ def checkout(pre_checkout_query):
 @bot.message_handler(content_types=['successful_payment'])
 def got_payment(message):
     user = db_utils.get_user(message.from_user.id)
+    lang = user.lang
+    order = Order.objects.get(id=message.successful_payment.invoice_payload)
     bot.send_message(message.chat.id,
-                     const.SUCCESS[user.lang].format(
+                     const.SUCCESS[lang].format(
                          message.successful_payment.total_amount / 100, message.successful_payment.currency),
                      parse_mode='Markdown')
+    msg = ""
+    for i, op in enumerate(order.products.all()):
+        msg += f'{i+1}. {op.product.title[lang]}: {op.amount} x {op.product.price}\n'
+    msg += f'\n{const.TOTAL_PRICE[lang]} = {order.total_price}\n'
+    msg += f'\n{const.ORDER_USER[lang]}: {user.name}\n'
+    msg += f'\n{const.ORDER_PHONE[lang]}: +{user.contact_number}\n'
+    msg += f'\n{const.ORDER_ADDRESS[lang]}: {order.address}\n'
+    msg += f'\n{const.ORDER_TYPE[lang]}: {order.shipping_type}\n'
+    admins = Admins.objects.all()
+    for admin in admins:
+        bot.send_message(admin.chat_id, msg)
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -221,7 +236,7 @@ def callback_handler(call):
         bot.send_invoice(chat_id,
                          title=f'{order.id}',
                          description=msg,
-                         provider_token='398062629:TEST:999999999_F91D8F69C042267444B74CC0B3C747757EB0E065',
+                         provider_token=provider_token,
                          currency='UZS',
                          prices=prices,
                          invoice_payload=f'{order.id}',

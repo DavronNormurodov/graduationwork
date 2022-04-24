@@ -30,6 +30,9 @@ class Order(Model):
     address = CharField(max_length=255, null=True, blank=True, default='tashkent')
     created_at = DateField(auto_now_add=True)
 
+    def order_info(self):
+        return self.__dict__
+
 
 class OrderProduct(Model):
     order = ForeignKey(Order, CASCADE, 'products')

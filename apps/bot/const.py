@@ -164,6 +164,10 @@ PAYMENT = {
     "uz": "To'lov 💷",
     "ru": "Оплата 💷"
 }
+ORDER_TYPE = {
+    "uz": "🚛Yetkazish usuli",
+    "ru": "🚛Способ доставки"
+}
 # ERROR MESSAGES
 USER_NOT_FOUND = {
     "uz": "Xatolik sodir bo'ldi. Iltimos, xatoliklarni oldini olish uchun /start tugmasini bosib, qaytadan boshlang.",
