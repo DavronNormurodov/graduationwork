@@ -28,6 +28,7 @@ class Order(Model):
     status = CharField(max_length=10, choices=status_choice, default='active')
     shipping_type = CharField(max_length=100, null=True, blank=True, default='fast')
     address = CharField(max_length=255, null=True, blank=True, default='tashkent')
+    broker = CharField(max_length=100, null=True, blank=True)
     created_at = DateField(auto_now_add=True)
 
     def order_info(self):

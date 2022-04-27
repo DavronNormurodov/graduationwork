@@ -144,3 +144,9 @@ def get_category():
             else:
                 return 1
     return None
+
+
+def inline_keyboard(text, data):
+    ikm = InlineKeyboardMarkup()
+    ikm.add(InlineKeyboardButton(text, callback_data=data))
+    return ikm

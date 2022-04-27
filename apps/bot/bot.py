@@ -179,7 +179,7 @@ def checkout(pre_checkout_query):
     order = db_utils.get_order(user)
     order.shipping_type = shipping_option_id
     order.address = address
-    order.total_price = total_amount
+    order.total_price = total_amount / 100
     order.status = 'process'
     order.save()
     bot.send_message(pre_checkout_query.from_user.id, const.BACK_MAIN_MENU[user.lang],
@@ -206,7 +206,7 @@ def got_payment(message):
     msg += f'\n{const.ORDER_TYPE[lang]}: {order.shipping_type}\n'
     admins = Admins.objects.all()
     for admin in admins:
-        bot.send_message(admin.chat_id, msg)
+        bot.send_message(admin.chat_id, msg, reply_markup=utils.inline_keyboard('delivered', f'complete_{order.id}'))
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -241,6 +241,22 @@ def callback_handler(call):
                          prices=prices,
                          invoice_payload=f'{order.id}',
                          is_flexible=True)
+    elif step == 'complete':
+        order = Order.objects.get(id=_id)
+        if order.status != 'delivered':
+            order.status = 'delivered'
+            order.broker = call.from_user.username
+            order.save()
+            bot.send_message(
+                call.message.json.get('chat')['id'],
+                const.DELIVERED_BY[user.lang].format(call.from_user.username),
+                reply_to_message_id=message_id)
+        else:
+            bot.send_message(
+                call.message.json.get('chat')['id'],
+                const.ALREADY_DELIVERED[user.lang].format(call.from_user.username, order.broker),
+                reply_to_message_id=message_id
+            )
 
 
 bot.add_custom_filter(custom_filters.StateFilter(bot))

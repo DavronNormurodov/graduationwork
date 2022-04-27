@@ -168,6 +168,14 @@ ORDER_TYPE = {
     "uz": "🚛Yetkazish usuli",
     "ru": "🚛Способ доставки"
 }
+DELIVERED_BY = {
+    "uz": "@{} yetkazib berdi",
+    "ru": "@{} Доставил"
+}
+ALREADY_DELIVERED = {
+    "uz": "@{} ushbu buyurtmani @{} yetkazib bergan",
+    "ru": "@{} доставил заказ @{}"
+}
 # ERROR MESSAGES
 USER_NOT_FOUND = {
     "uz": "Xatolik sodir bo'ldi. Iltimos, xatoliklarni oldini olish uchun /start tugmasini bosib, qaytadan boshlang.",
