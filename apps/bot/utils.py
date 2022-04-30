@@ -72,22 +72,25 @@ def get_subcategories_keyboard(lang, cat):
 
 
 def get_inline_products(product):
+    products = Product.objects.filter(category=product.category).order_by('id')
+    index = [p for p in products].index(product)
+    total = products.count()
     ikbs = (
         InlineKeyboardButton('◀️', callback_data=f'back_{product.id}'),
-        InlineKeyboardButton(f"{product.id}/{5}", callback_data='2'),
+        InlineKeyboardButton(f"{index+1}/{total}", callback_data=f'www_{product.id}'),
         InlineKeyboardButton("▶️", callback_data=f'forward_{product.id}')
     )
-    ikb = InlineKeyboardButton('add to card', callback_data=f'add_{product.id}'),
+    ikb = InlineKeyboardButton('➕', callback_data=f'add:{index+1}-{total}_{product.id}'),
     ikm = InlineKeyboardMarkup()
     ikm.add(*ikbs)
     ikm.add(*ikb)
     return ikm
 
 
-def get_inline_keyboard_numbers(product_id):
+def get_inline_keyboard_numbers(product_id, index, total):
     ikbs = [
         InlineKeyboardButton('◀️', callback_data=f'back_{product_id}'),
-        InlineKeyboardButton(f"{product_id}/{5}", callback_data='2'),
+        InlineKeyboardButton(f"{index}/{total}", callback_data=f'tt_{product_id}'),
         InlineKeyboardButton("▶️", callback_data=f'forward_{product_id}')
     ]
     for i in range(1, 10):

@@ -26,7 +26,6 @@ def command_help(message):
 
 @bot.message_handler(commands=['start'])
 def command_help(message):
-    print(message)
     chat_id = message.from_user.id
     askers.user_requisites(bot, chat_id)
 
@@ -217,8 +216,9 @@ def callback_handler(call):
     step = data.split('_')[0]
     _id = data.split('_')[1]
     message_id = call.message.message_id
-    if step == 'add':
-        askers.show_keyboard_numbers(bot, chat_id, message_id, _id, user.lang)
+    if step.split(':')[0] == 'add':
+        index, total = step.split(':')[1].split('-')
+        askers.show_keyboard_numbers(bot, chat_id, message_id, _id, index, total)
         pass
     elif step in ('forward', 'back'):
         askers.show_next_product(bot, user, _id, message_id, step)

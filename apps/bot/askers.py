@@ -89,16 +89,17 @@ def show_products(bot, chat_id, lang, cat):
         bot.send_message(chat_id, const.PRODUCT_DOES_NOT_EXIST[lang])
 
 
-def show_keyboard_numbers(bot, chat_id, message_id, product_id, lang):
-    bot.edit_message_reply_markup(chat_id, message_id, reply_markup=utils.get_inline_keyboard_numbers(product_id))
-    # bot.send_message(chat_id, 'add', reply_markup=utils.get_inline_keyboard_numbers())
+def show_keyboard_numbers(bot, chat_id, message_id, product_id, index, total):
+    bot.edit_message_reply_markup(
+        chat_id,
+        message_id,
+        reply_markup=utils.get_inline_keyboard_numbers(product_id, index, total))
 
 
 def show_next_product(bot, user, product_id, message_id, step):
     chat_id = user.chat_id
     product_cat = Product.objects.get(id=product_id).category
     products = Product.objects.filter(category=product_cat).order_by('id')
-
     next_product = products.filter(id__gt=product_id).first() if step == 'forward' \
         else products.filter(id__lt=product_id).last()
     if next_product:
