@@ -138,9 +138,10 @@ def default_message_handler(message):
     user = db_utils.get_user(chat_id)
     if not user:
         askers.user_not_found(bot, chat_id)
-    bot.send_message(chat_id, const.PRODUCTS[user.lang],
-                     reply_markup=utils.get_main_menu_keyboard(user.lang))
-    bot.set_state(chat_id, UserStates.main_menu.name)
+    else:
+        bot.send_message(chat_id, const.PRODUCTS[user.lang],
+                         reply_markup=utils.get_main_menu_keyboard(user.lang))
+        bot.set_state(chat_id, UserStates.main_menu.name)
 
 
 """==================================PAYMENT========================================="""
