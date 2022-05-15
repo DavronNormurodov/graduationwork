@@ -1,10 +1,8 @@
 import telebot
 from telebot.storage import StateMemoryStorage
-# from telebot.handler_backends import State, StatesGroup
 from telebot import custom_filters
-from telebot.types import (ReplyKeyboardMarkup, KeyboardButton, InputMedia,
-                           ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton)
-import re
+from telebot.types import ReplyKeyboardRemove
+
 
 from users.models import User, Admins
 from orders.models import Order, OrderProduct
