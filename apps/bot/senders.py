@@ -69,14 +69,12 @@ def handle_categories(bot, chat_id, msg, lang):
                 cat = c
                 break
         if cat:
-            if cat.children.all():
+            if cat.children.exists():
                 utils.set_category(cat.children.first())
+                askers.show_sub_categories(bot, chat_id, lang, cat)
             else:
                 utils.set_category(cat)
-            if not cat.children.all():
                 askers.show_products(bot, chat_id, lang, cat)
-            else:
-                askers.show_sub_categories(bot, chat_id, lang, cat)
 
 
 def handle_orders(bot, chat_id, msg, order, lang):
