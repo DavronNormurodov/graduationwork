@@ -83,7 +83,7 @@ def show_sub_categories(bot, chat_id, lang, cat):
 def show_products(bot, chat_id, lang, cat):
     product = Product.objects.filter(category=cat).order_by('id').first()
     if product:
-        caption = f'{product.title[lang]}\n\n{product.price}'
+        caption = f'{product.title[lang]}\n\n{product.desc[lang]}\n\n{product.price}'
         bot.send_photo(chat_id, product.image, caption, reply_markup=utils.get_inline_products(product))
     else:
         bot.send_message(chat_id, const.PRODUCT_DOES_NOT_EXIST[lang])
@@ -103,7 +103,7 @@ def show_next_product(bot, user, product_id, message_id, step):
     next_product = products.filter(id__gt=product_id).first() if step == 'forward' \
         else products.filter(id__lt=product_id).last()
     if next_product:
-        caption = f'{next_product.title[user.lang]}\n\n{next_product.price}'
+        caption = f'{next_product.title[user.lang]}\n\n{next_product.desc[user.lang]}\n\n{next_product.price}'
         try:
             bot.edit_message_media(InputMedia('photo', next_product.image, caption),
                                    chat_id,
@@ -113,7 +113,7 @@ def show_next_product(bot, user, product_id, message_id, step):
             pass
     else:
         next_product = products.first() if step == 'forward' else products.last()
-        caption = f'{next_product.title[user.lang]}\n\n{next_product.price}'
+        caption = f'{next_product.title[user.lang]}\n\n{next_product.desc[user.lang]}\n\n{next_product.price}'
         try:
             bot.edit_message_media(InputMedia('photo', next_product.image, caption),
                                    chat_id,
