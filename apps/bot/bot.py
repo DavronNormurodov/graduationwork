@@ -1,8 +1,8 @@
+
 import telebot
 from telebot.storage import StateMemoryStorage
 from telebot import custom_filters
 from telebot.types import ReplyKeyboardRemove
-
 
 from users.models import User, Admins
 from orders.models import Order, OrderProduct
@@ -145,6 +145,7 @@ def default_message_handler(message):
 """==================================PAYMENT========================================="""
 
 from telebot.types import LabeledPrice, ShippingOption
+
 shipping_options = [
         ShippingOption(id='fast', title='Eng tez').add_price(LabeledPrice('Eng tez', 1000000)),
         ShippingOption(id='one_day', title='Bir kun').add_price(LabeledPrice('Bir kun', 500000)),
@@ -230,7 +231,7 @@ def callback_handler(call):
         order = db_utils.get_order(user)
         prices = []
         for e in order.products.all():
-            prices.append(LabeledPrice(e.product.title[user.lang], int(f'{int(e.product.price)}00')))
+            prices.append(LabeledPrice(e.product.title[user.lang], int(f'{int(e.product.price * e.amount)}00')))
         msg = const.PAYMENT_NOTIFICATION[user.lang]
         bot.send_invoice(chat_id,
                          title=f'{order.id}',
