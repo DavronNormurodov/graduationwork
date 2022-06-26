@@ -27,12 +27,15 @@ class Order(Model):
     description = TextField(null=True)
     status = CharField(max_length=10, choices=status_choice, default='active')
     shipping_type = CharField(max_length=100, null=True, blank=True, default='fast')
-    address = CharField(max_length=255, null=True, blank=True, default='tashkent')
+    address = CharField(max_length=255, null=True, blank=True)
     broker = CharField(max_length=100, null=True, blank=True)
     created_at = DateField(auto_now_add=True)
 
     def order_info(self):
         return self.__dict__
+
+    def __str__(self):
+        return f"#[{self.id}] {self.user.name}"
 
 
 class OrderProduct(Model):

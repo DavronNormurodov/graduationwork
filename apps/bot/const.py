@@ -70,12 +70,12 @@ ABOUT_US_INFO = {
 vulputate efficitur. Fusce quis leo scelerisque, volutpat sem eu, cursus ex. \
 Duis aliquam erat in dui eleifend, ac placerat ligula sodales. Sed efficitur \
 tristique nunc ac ultrices. Phasellus lorem arcu, fringilla vitae erat a, fringilla \
-ultricies nulla.",
+ultricies nulla. \n🗣Contact person: @Davron_Normurodov",
 
     "ru": "Лорем ипсум долор сит амет, cонсеcтетур адиписcинг елит. Нам моллис вулпутате еффиcитур.\
 Фусcе қуис лео сcелерисқуе, волутпат сем еу, cурсус ех. Дуис алиқуам ерат ин дуи елеифенд, \
 аc плаcерат лигула содалес. Сед еффиcитур тристиқуе нунc аc ултриcес. Пҳаселлус лорем арcу, \
-фрингилла витае ерат а, фрингилла ултриcиес нулла."
+фрингилла витае ерат а, фрингилла ултриcиес нулла. \n🗣Contact person: @Davron_Normurodov"
 }
 BACK_MAIN_MENU = {
     "uz": "Asosiy menyu",

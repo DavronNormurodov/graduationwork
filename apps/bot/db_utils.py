@@ -90,4 +90,6 @@ def remove_product_from_card(bot, chat_id, message_id, order, product_id, lang):
 
 
 def clear_the_card(order):
-    order.delete()
+    order.status = 'cancelled'
+    order.save()
+
